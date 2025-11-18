@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.5</version>
+		<relativePath />
+	</parent>
+
+	<groupId>org.lokivas</groupId>
+	<artifactId>cloud-function-docker</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>cloud-function-docker</name>
+	<description>Demo for Spring Cloud Function and Docker</description>
+
+	<properties>
+		<java.version>17</java.version>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
+		<docker.username>savithasaba</docker.username>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-function-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!--<plugin>
+				Spotify Maven plugin/Need Dockerfile/Need local Docker/mvn install
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<phase>install</phase>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>${docker.username}/${project.name}</repository>
+					<tag>${project.version}</tag>
+					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>-->
+			<!--<plugin>
+				Google jib plugin/No Dockerfile/No Local Docker
+				jib:build - Builds and pushes to the remote registry
+				jib:dockerBuild - Builds and loads into local. Needs Local Docker
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.5.0</version>
+				<configuration>
+					<from>
+						<image>eclipse-temurin:17-jre-jammy</image>
+					</from>
+					<to>
+						<image>${docker.username}/${project.name}:${project.version}</image>
+					</to>
+					<container>
+						<ports>
+							<port>8080</port>
+						</ports>
+						<user>1000:1000</user>
+					</container>
+				</configuration>
+			</plugin>-->
+			<!--<plugin>
+				Springboot Maven Plugin/No Dockerfile/Need Local Docker
+				spring-boot:build-image - Builds locally AND pushes to the remote registry.
+				spring-boot:build-image -Dspring-boot.build-image.push=false - Local Build only
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>${docker.username}/${project.name}:${project.version}</name>
+					</image>
+				</configuration>
+			</plugin>-->
+		</plugins>
+		<finalName>cloud-function-docker</finalName>
+	</build>
+
+</project>
