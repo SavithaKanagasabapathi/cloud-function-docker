@@ -9,10 +9,6 @@ pipeline {
         
     }
     
-    environment {
-		DOCKER_CREDS = credentials('docker-creds')
-	}
-
     parameters {
 		// Define the parameter to select which stage to run
         choice(
