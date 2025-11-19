@@ -6,6 +6,10 @@ pipeline {
         maven 'M3.9.9' 
         jdk 'JDK21'
     }
+    
+    environment {
+		DOCKER_CREDS = credentials('docker-creds')
+	}
 
     parameters {
 		// Define the parameter to select which stage to run
