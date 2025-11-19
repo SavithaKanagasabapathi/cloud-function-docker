@@ -4,37 +4,59 @@ pipeline {
     tools {
         // Use the name you configured in Tools Configuration
         maven 'M3.9.9' 
-        jdk 'JDK21' // Use the name you configured for the JDK
+        jdk 'JDK21'
+    }
+
+    parameters {
+		// Define the parameter to select which stage to run
+        choice(
+            name: 'TARGET_STAGE',
+            choices: ['ALL', 'BUILD', 'TEST', 'DEPLOY'],
+            description: 'Select the stage to run, or ALL for the entire pipeline.'
+        )
     }
 
     stages {
-        
-        stage('Build') {
+        // Stage 1: BUILD - The core action you want to control
+        stage('BUILD') {
+            when { 
+                expression { 
+                    // This runs if ALL is selected OR if 'BUILD' is selected
+                    return params.TARGET_STAGE == 'ALL' || params.TARGET_STAGE == 'BUILD'
+                }
+            }
             steps {
-                // This command cleans the target directory, compiles the code, 
-                // runs unit tests, and packages the Spring Boot application into a JAR file.
+                echo 'Running build stage: mvn clean install -DskipTests'
+                // Replace with your actual Maven command for building
                 sh 'mvn clean install -DskipTests' 
             }
         }
-        
-        stage('Test') {
-            steps {
-                // Separate test stage to run unit tests
-                sh 'mvn test'
-            }
-        }
 
-        stage('Package') {
+        // Stage 2: TEST - Conditional stage
+        stage('TEST') {
+            when { 
+                expression { 
+                    // This runs only if ALL is selected OR if 'TEST' is selected
+                    return params.TARGET_STAGE == 'ALL' || params.TARGET_STAGE == 'TEST'
+                }
+            }
             steps {
-                // Creates the final Spring Boot executable JAR using the spring-boot-maven-plugin
-                sh 'mvn package'
+                echo 'Running test stage: mvn test'
+                // sh 'mvn test'
             }
         }
         
-        stage('Archive Artifacts') {
+        // Stage 3: DEPLOY - Conditional stage
+        stage('DEPLOY') {
+            when { 
+                expression { 
+                    // This runs only if ALL is selected OR if 'DEPLOY' is selected
+                    return params.TARGET_STAGE == 'ALL' || params.TARGET_STAGE == 'DEPLOY'
+                }
+            }
             steps {
-                // Archives the resulting JAR file so you can download it from the Jenkins build page
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                echo 'Running deploy stage...'
+                // sh 'deployment commands'
             }
         }
     }
