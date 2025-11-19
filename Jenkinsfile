@@ -5,8 +5,6 @@ pipeline {
         // Use the name you configured in Tools Configuration
         maven 'M3.9.9' 
         jdk 'JDK21'
-        docker 'DOCKER_CREDS'
-        
     }
     
     parameters {
